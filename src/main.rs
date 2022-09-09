@@ -2,12 +2,9 @@ use polars::prelude::*;
 
 fn main() {
     let df = df! [
-        "nrs" => [Some(1), Some(2), Some(3), None, Some(5)],
-        "names" => [Some("foo"), Some("ham"), Some("spam"), Some("eggs"), None],
-        "random" => [1.4, 1.2, 1.5, 0.3, 0.1],
-        "groups" => ["A", "A", "B", "C", "B"],
+        "my_int" => [Some(1), Some(2), Some(3), None, Some(5)],
     ]
-    .expect("should be a df");
+    .unwrap();
 
     println!("{}", &df);
 
@@ -15,12 +12,14 @@ fn main() {
         .clone()
         .lazy()
         .select([
-            col("names"),
-            col("nrs"),
-            col("nrs").pow(2).alias("pow_2_nrs"),
-            col("nrs").quantile(0.3, QuantileInterpolOptions::Nearest).alias("quantile_nrs"),
+            col("my_int"),
+            col("my_int").pow(2).alias("pow_2_my_int"),
+            col("my_int")
+                .quantile(0.3, QuantileInterpolOptions::Nearest)
+                .alias("quantile_my_int"),
         ])
         .collect()
-        .expect("a df");
+        .unwrap();
+
     println!("{}", out);
 }
